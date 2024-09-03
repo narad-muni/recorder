@@ -1,0 +1,36 @@
+{
+    "inputs": [
+        {
+            "source": "127.0.0.1:8181",
+            "mode": "tcp"
+        },
+        {
+            "source": "out_new.txt",
+            "mode": "file"
+        },
+        {
+            "source": "233.1.78.11:33566",
+            "mode": "udp"
+        }
+    ],
+    "outputs": [
+        {
+            "source": "233.1.78.11:33566",
+            "mode": "udp"
+        },
+        {
+            "source": "out.txt",
+            "mode": "file"
+        },
+        {
+            "source": "127.0.0.1:8181",
+            "mode": "tcp"
+        }
+    ],
+    "from": [
+        "file"
+    ],
+    "to": [
+        "udp"
+    ]
+}

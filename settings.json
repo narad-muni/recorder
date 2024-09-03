@@ -1,0 +1,36 @@
+{
+    "inputs": [
+        {
+            "source_ip": "127.0.0.1",
+            "source_port": 8181,
+            "mode": "tcp"
+        },
+        {
+            "source_ip": "233.1.78.11",
+            "source_port": 33566,
+            "mode": "udp"
+        },
+        {
+            "file_path": "test.txt",
+            "mode": "file",
+            "play_timed": true
+        }
+    ],
+    "outputs": [
+        {
+            "source_ip": "233.1.78.11",
+            "source_port": 33566,
+            "mode": "udp"
+        },
+        {
+            "file_path": "test.txt",
+            "mode": "file"
+        }
+    ],
+    "from": [
+        "file"
+    ],
+    "to": [
+        "udp"
+    ]
+}
