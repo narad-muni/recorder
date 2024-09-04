@@ -4,6 +4,7 @@ use crate::{
     utils::{bytes_to_u32, u32_to_bytes},
 };
 use bus::{Bus, BusReader};
+use chrono::Local;
 use std::{
     fs::OpenOptions,
     io::{Error, Read, Write},
@@ -20,11 +21,14 @@ impl Output for FileAdapter {
         block: Block,
         channel: &mut BusReader<([u8; BUF_SIZE], u32)>,
     ) -> Result<(), Error> {
+        let date_string = format!("{:?}", Local::now().date_naive());
+        let file_path = &block.file_path.replace("$date", date_string.as_str());
+
         let mut file = OpenOptions::new()
             .create(true)
             .write(true)
             .append(true)
-            .open(&block.file_path)
+            .open(file_path)
             .unwrap();
 
         let mut prev_time = Instant::now();
@@ -49,9 +53,12 @@ impl Output for FileAdapter {
 
 impl Input for FileAdapter {
     fn read(&self, block: Block, channel: &mut Bus<([u8; BUF_SIZE], u32)>) -> Result<(), Error> {
+        let date_string = format!("{:?}", Local::now().date_naive());
+        let file_path = &block.file_path.replace("$date", date_string.as_str());
+
         let mut file = OpenOptions::new()
             .read(true)
-            .open(&block.file_path)
+            .open(file_path)
             .expect("cannot open file");
 
         let mut pos: usize = 0;

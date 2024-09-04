@@ -23,14 +23,14 @@
             "mode": "udp"
         },
         {
-            "file_path": "test.txt",
+            "file_path": "test_$date.txt",
             "mode": "file"
         }
     ],
     "from": [
-        "file"
+        "udp"
     ],
     "to": [
-        "udp"
+        "file"
     ]
 }
