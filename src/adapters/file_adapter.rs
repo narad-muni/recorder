@@ -81,7 +81,7 @@ impl Input for FileAdapter {
             if block.play_timed {
                 let diff = bytes_to_u32(diff_buf);
                 println!("Sleeping for {} ms", diff);
-                thread::sleep(Duration::from_millis(diff.into()));
+                thread::sleep(Duration::from_millis((diff as f64 * block.speed_multiplier) as u64));
             }
 
             let mut buf = [0; BUF_SIZE];

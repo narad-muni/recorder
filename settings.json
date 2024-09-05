@@ -13,7 +13,8 @@
         {
             "file_path": "test.txt",
             "mode": "file",
-            "play_timed": true
+            "play_timed": true,
+            "speed_multiplier": 1
         }
     ],
     "outputs": [
