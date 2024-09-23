@@ -33,12 +33,16 @@ pub struct Block {
     pub file_path: String,
     #[serde(default)]
     pub play_timed: bool,
+    #[serde(default)]
+    pub controlled_play: bool,
     #[serde(default = "default_speed")]
     pub speed_multiplier: f64,
     pub mode: Mode,
 }
 
-fn default_speed() -> f64 {1.0}
+fn default_speed() -> f64 {
+    1.0
+}
 
 fn default_ip() -> String {
     "0.0.0.0".to_string()

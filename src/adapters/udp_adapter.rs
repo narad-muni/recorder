@@ -43,7 +43,7 @@ impl Output for UdpAdapter {
         loop {
             if let Ok((data, size)) = channel.recv() {
                 println!("Writing {:?} bytes to udp", size);
-                socket.send(&data).unwrap();
+                socket.send(&data[0..size as usize]).unwrap();
             }
         }
     }

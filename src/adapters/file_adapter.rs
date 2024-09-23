@@ -7,7 +7,7 @@ use bus::{Bus, BusReader};
 use chrono::Local;
 use std::{
     fs::OpenOptions,
-    io::{Error, Read, Write},
+    io::{stdin, Error, Read, Write},
     thread,
     time::{Duration, Instant},
 };
@@ -43,7 +43,7 @@ impl Output for FileAdapter {
                 // Write size header
                 file.write_all(&u32_to_bytes(size)).unwrap();
 
-                println!("Writing {:?} bytes to File", data.len());
+                println!("Writing {:?} bytes to File", data[0..size as usize].len());
 
                 file.write_all(&data[0..size as usize]).unwrap();
             }
@@ -79,9 +79,22 @@ impl Input for FileAdapter {
             let size = bytes_to_u32(size_buff);
 
             if block.play_timed {
-                let diff = bytes_to_u32(diff_buf);
-                println!("Sleeping for {} ms", diff);
-                thread::sleep(Duration::from_millis((diff as f64 * block.speed_multiplier) as u64));
+                let mut diff = bytes_to_u32(diff_buf);
+
+                // If multiplier is more than 1, then lower limit of time diff should be 1 atleast
+                // because multiplying by 0 is useless for slowing speed
+                if block.speed_multiplier > 1.0 {
+                    diff = diff.max(1);
+                }
+
+                println!("Sleeping for {} ms", diff as f64 * block.speed_multiplier);
+                thread::sleep(Duration::from_millis(
+                    (diff as f64 * block.speed_multiplier) as u64,
+                ));
+            }
+
+            if block.controlled_play {
+                stdin().read_exact(&mut [0; 1]).unwrap();
             }
 
             let mut buf = [0; BUF_SIZE];

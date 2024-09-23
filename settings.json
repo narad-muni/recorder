@@ -11,16 +11,17 @@
             "mode": "udp"
         },
         {
-            "file_path": "test.txt",
+            "file_path": "/home/appadmin/Work/generic_reader/out_eq.txt",
             "mode": "file",
             "play_timed": true,
+            "controlled_play": true,
             "speed_multiplier": 1
         }
     ],
     "outputs": [
         {
-            "source_ip": "233.1.78.11",
-            "source_port": 33566,
+            "source_ip": "233.1.2.5",
+            "source_port": 7811,
             "mode": "udp"
         },
         {
@@ -29,9 +30,9 @@
         }
     ],
     "from": [
-        "udp"
+        "file"
     ],
     "to": [
-        "file"
+        "udp"
     ]
 }
