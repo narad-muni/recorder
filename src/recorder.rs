@@ -32,6 +32,8 @@ pub struct Block {
     #[serde(default)]
     pub file_path: String,
     #[serde(default)]
+    pub interface_ip: String,
+    #[serde(default)]
     pub play_timed: bool,
     #[serde(default)]
     pub controlled_play: bool,

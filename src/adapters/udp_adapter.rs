@@ -58,10 +58,10 @@ impl Input for UdpAdapter {
         let socket = Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP)).unwrap();
         socket.set_reuse_address(true).unwrap();
         socket
-            .join_multicast_v4(&block.source_ip.parse().unwrap(), &Ipv4Addr::UNSPECIFIED)
+            .join_multicast_v4(&block.source_ip.parse().unwrap(), &Ipv4Addr::from_str(&block.interface_ip).unwrap())
             .unwrap();
         socket
-            .bind(&SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, block.source_port).into())
+            .bind(&SocketAddrV4::new(Ipv4Addr::from_str(&block.bind_ip).unwrap(), block.source_port).into())
             .unwrap();
 
         let mut reader = BufReader::new(socket);
