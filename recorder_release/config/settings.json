@@ -1,0 +1,21 @@
+{
+    "inputs": [
+        {
+            "source_ip": "233.1.78.11",
+            "source_port": 33566,
+            "mode": "udp"
+        }
+    ],
+    "outputs": [
+        {
+            "file_path": "data/test_$date.txt",
+            "mode": "file"
+        }
+    ],
+    "from": [
+        "udp"
+    ],
+    "to": [
+        "file"
+    ]
+}
