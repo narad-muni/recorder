@@ -63,7 +63,26 @@ impl Input for FileAdapter {
 
         let mut pos: usize = 0;
 
+        let mut count: i32 = 0;
+
         loop {
+            // enter / 0 = 1 packet
+            // 2 = 2 packets
+            // -1 = infinite
+            if block.controlled_play {
+
+                if count == 0 {
+                    let mut count_str = String::new();
+                    println!("Waiting for key press");
+
+                    stdin().read_line(&mut count_str).unwrap();
+
+                    count = count_str.trim().parse().unwrap_or(0);
+                }else if count > 0 {
+                    count -= 1;
+                }
+            }
+
             if pos == file.metadata().unwrap().len() as usize {
                 thread::sleep(Duration::from_millis(500));
                 continue;
@@ -91,10 +110,6 @@ impl Input for FileAdapter {
                 thread::sleep(Duration::from_millis(
                     (diff as f64 * block.speed_multiplier) as u64,
                 ));
-            }
-
-            if block.controlled_play {
-                stdin().read_exact(&mut [0; 1]).unwrap();
             }
 
             let mut buf = [0; BUF_SIZE];
