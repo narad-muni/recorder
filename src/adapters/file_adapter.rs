@@ -7,7 +7,7 @@ use bus::{Bus, BusReader};
 use chrono::Local;
 use std::{
     fs::OpenOptions,
-    io::{stdin, Error, Read, Write},
+    io::{stdin, Error, Read, Seek, Write},
     thread,
     time::{Duration, Instant},
 };
@@ -84,7 +84,8 @@ impl Input for FileAdapter {
             }
 
             if pos == file.metadata().unwrap().len() as usize {
-                thread::sleep(Duration::from_millis(500));
+                pos = 0;
+                file.seek(std::io::SeekFrom::Start(0)).unwrap();
                 continue;
             }
 
