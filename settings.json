@@ -12,7 +12,7 @@
             "mode": "udp"
         },
         {
-            "file_path": "/home/appadmin/Downloads/bse.dat",
+            "file_path": "/home/appadmin/Work/generic_reader/out_eq.txt",
             "mode": "file",
             "play_timed": false,
             "controlled_play": true,
