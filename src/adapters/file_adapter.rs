@@ -114,7 +114,7 @@ impl Input for FileAdapter {
             }
 
             let mut buf = [0; BUF_SIZE];
-            file.read_exact(&mut buf[..size as usize]).unwrap();
+            file.read_exact(&mut buf[..size as usize]);
             pos += size as usize;
 
             println!("Reading {} bytes from File", size);
