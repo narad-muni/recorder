@@ -115,7 +115,8 @@ impl Input for FileAdapter {
 
             let mut buf = [0; BUF_SIZE];
             if let Err(_) = file.read_exact(&mut buf[..size as usize]) {
-                pos += size as usize;
+                pos += 0;
+                file.seek(std::io::SeekFrom::Start(0)).unwrap();
                 continue;
             }
 
