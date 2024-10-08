@@ -104,6 +104,12 @@ impl Input for FileAdapter {
             pos += file.read(&mut size_buff).unwrap();
             let size = bytes_to_u32(size_buff);
 
+            if size == 0 && block.play_loop {
+                pos = 0;
+                file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                continue;
+            }
+
             if block.play_timed {
                 let mut diff = bytes_to_u32(diff_buf);
 
