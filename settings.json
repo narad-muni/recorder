@@ -15,6 +15,7 @@
             "file_path": "/home/appadmin/Work/generic_reader/out_eq.txt",
             "mode": "file",
             "play_timed": false,
+            "play_loop": true,
             "controlled_play": true,
             "speed_multiplier": 1
         }

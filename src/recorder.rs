@@ -36,6 +36,8 @@ pub struct Block {
     #[serde(default)]
     pub play_timed: bool,
     #[serde(default)]
+    pub play_loop: bool,
+    #[serde(default)]
     pub controlled_play: bool,
     #[serde(default = "default_speed")]
     pub speed_multiplier: f64,

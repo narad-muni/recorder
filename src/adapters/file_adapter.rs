@@ -83,9 +83,15 @@ impl Input for FileAdapter {
                 }
             }
 
+            // If file ends, play in loop
             if pos == file.metadata().unwrap().len() as usize {
-                pos = 0;
-                file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                if block.play_loop {
+                    pos = 0;
+                    file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                } else {
+                    println!("File end");
+                    thread::sleep(Duration::from_secs(1));
+                }
                 continue;
             }
 
