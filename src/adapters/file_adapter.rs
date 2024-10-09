@@ -77,7 +77,7 @@ impl Input for FileAdapter {
 
                     stdin().read_line(&mut count_str).unwrap();
 
-                    count = count_str.trim().parse().unwrap_or(0);
+                    count = count_str.trim().parse().unwrap_or(1) - 1;
                 }else if count > 0 {
                     count -= 1;
                 }
