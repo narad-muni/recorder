@@ -104,10 +104,16 @@ impl Input for FileAdapter {
             pos += file.read(&mut size_buff).unwrap();
             let size = bytes_to_u32(size_buff);
 
-            if size == 0 && block.play_loop {
-                pos = 0;
-                file.seek(std::io::SeekFrom::Start(0)).unwrap();
-                continue;
+            if size == 0 {
+
+                if block.play_loop {
+                    pos = 0;
+                    file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                    continue;
+                } else {
+                    println!("File ended, waiting for changes");
+                    thread::sleep(Duration::from_secs(2));;
+                }
             }
 
             if block.play_timed {
