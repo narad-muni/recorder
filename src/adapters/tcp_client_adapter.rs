@@ -12,18 +12,18 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub struct TcpAdapter {}
+pub struct TcpClientAdapter {}
 
-impl Input for TcpAdapter {
+impl Input for TcpClientAdapter {
     fn read(
         &self,
         block: Block,
         channel: &mut Bus<([u8; BUF_SIZE], u32)>,
     ) -> Result<(), std::io::Error> {
         let socket = Socket::new(Domain::IPV4, Type::STREAM, Some(Protocol::TCP)).unwrap();
-        socket
-            .bind(&SocketAddrV4::new(block.bind_ip.parse().unwrap(), block.bind_port).into())
-            .unwrap();
+        // socket
+        //     .bind(&SocketAddrV4::new(block.bind_ip.parse().unwrap(), block.bind_port).into())
+        //     .unwrap();
         socket
             .connect(&SocketAddrV4::new(block.source_ip.parse().unwrap(), block.source_port).into())
             .unwrap();
@@ -50,16 +50,16 @@ impl Input for TcpAdapter {
     }
 }
 
-impl Output for TcpAdapter {
+impl Output for TcpClientAdapter {
     fn write(
         &self,
         block: Block,
         channel: &mut BusReader<([u8; BUF_SIZE], u32)>,
     ) -> Result<(), std::io::Error> {
         let socket = Socket::new(Domain::IPV4, Type::STREAM, Some(Protocol::TCP)).unwrap();
-        socket
-            .bind(&SocketAddrV4::new(block.bind_ip.parse().unwrap(), block.bind_port).into())
-            .unwrap();
+        // socket
+        //     .bind(&SocketAddrV4::new(block.bind_ip.parse().unwrap(), block.bind_port).into())
+        //     .unwrap();
         socket
             .connect(&SocketAddrV4::new(block.source_ip.parse().unwrap(), block.source_port).into())
             .unwrap();

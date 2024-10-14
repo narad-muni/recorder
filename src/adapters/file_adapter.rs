@@ -113,7 +113,7 @@ impl Input for FileAdapter {
                     continue;
                 } else {
                     println!("File ended, waiting for changes");
-                    thread::sleep(Duration::from_secs(2));;
+                    thread::sleep(Duration::from_secs(2));
                 }
             }
 

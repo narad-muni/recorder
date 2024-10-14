@@ -13,7 +13,9 @@ use crate::constants::BUF_SIZE;
 pub enum Mode {
     #[serde(rename = "*")]
     All,
-    Tcp,
+    TcpClient,
+    TcpServer,
+    TcpProxy,
     File,
     Udp,
 }
@@ -125,8 +127,13 @@ impl<'a> Recorder {
             })
             .collect();
 
-        if output_adapters.len() == 0 || input_adapters.len() == 0 {
-            panic!("Error, No adapter mapping found");
+        if input_adapters.len() == 0 {
+            panic!("Error, No input adapters found");
+        }
+
+        // if no output adapters and no proxy adapter, then error
+        if output_adapters.len() == 0 && !input_adapters.iter().any(|(block, _)| block.mode == Mode::TcpProxy) {
+            panic!("Error, No output adapters found");
         }
 
         // Create a bus of buffer for input
