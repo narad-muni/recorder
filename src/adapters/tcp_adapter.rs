@@ -39,6 +39,7 @@ impl Input for TcpAdapter {
                 break;
             }
 
+            #[cfg(debug_assertions)]
             println!("Reading {:?} bytes from Tcp", length);
             channel.broadcast((buf, *length as u32));
         }
@@ -64,6 +65,7 @@ impl Output for TcpAdapter {
             .unwrap();
 
         while let Ok((data, size)) = channel.recv() {
+            #[cfg(debug_assertions)]
             println!("Writing {:?} bytes to tcp", size);
             socket.send(&data).unwrap();
         }

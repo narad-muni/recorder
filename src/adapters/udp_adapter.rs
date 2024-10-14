@@ -42,6 +42,8 @@ impl Output for UdpAdapter {
 
         loop {
             if let Ok((data, size)) = channel.recv() {
+                
+                #[cfg(debug_assertions)]
                 println!("Writing {:?} bytes to udp", size);
                 socket.send(&data[0..size as usize]).unwrap();
             }
@@ -78,6 +80,7 @@ impl Input for UdpAdapter {
 
             channel.broadcast((buf, *length as u32));
 
+            #[cfg(debug_assertions)]
             println!("Reading {:?} bytes from udp", length);
         }
 

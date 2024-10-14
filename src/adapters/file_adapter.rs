@@ -43,6 +43,7 @@ impl Output for FileAdapter {
                 // Write size header
                 file.write_all(&u32_to_bytes(size)).unwrap();
 
+                #[cfg(debug_assertions)]
                 println!("Writing {:?} bytes to File", data[0..size as usize].len());
 
                 file.write_all(&data[0..size as usize]).unwrap();
@@ -125,6 +126,7 @@ impl Input for FileAdapter {
                     diff = diff.max(1);
                 }
 
+                #[cfg(debug_assertions)]
                 println!("Sleeping for {} ms", diff as f64 * block.speed_multiplier);
                 thread::sleep(Duration::from_millis(
                     (diff as f64 * block.speed_multiplier) as u64,
@@ -138,6 +140,7 @@ impl Input for FileAdapter {
                 continue;
             }
 
+            #[cfg(debug_assertions)]
             println!("Reading {} bytes from File", size);
             channel.broadcast((buf, size));
         }
