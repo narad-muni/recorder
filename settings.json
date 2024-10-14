@@ -3,27 +3,34 @@
         {
             "source_ip": "127.0.0.1",
             "source_port": 8181,
-            "mode": "tcp"
+            "mode": "tcp_client"
         },
         {
             "source_ip": "233.1.78.11",
             "source_port": 33566,
             "interface_ip": "kdhasj",
-            "mode": "udp"
+            "mode": "tcp_server"
         },
         {
-            "file_path": "/home/appadmin/Work/generic_reader/out_eq.txt",
+            "file_path": "100mbeq.txt",
             "mode": "file",
             "play_timed": false,
             "play_loop": true,
             "controlled_play": true,
             "speed_multiplier": 1
+        },
+        {
+            "source_ip": "172.18.2.34",
+            "source_port": 22,
+            "bind_ip": "127.0.0.1",
+            "bind_port": 8181,
+            "mode": "tcp_proxy"
         }
     ],
     "outputs": [
         {
-            "source_ip": "233.1.2.5",
-            "source_port": 7811,
+            "source_ip": "231.1.2.5",
+            "source_port": 31770,
             "mode": "udp"
         },
         {
