@@ -7,7 +7,7 @@ use bus::{Bus, BusReader};
 use chrono::Local;
 use std::{
     fs::OpenOptions,
-    io::{stdin, Error, Read, Seek, Write},
+    io::{stdin, BufReader, Error, Read, Seek, Write},
     thread,
     time::{Duration, Instant},
 };
@@ -57,12 +57,13 @@ impl Input for FileAdapter {
         let date_string = format!("{:?}", Local::now().date_naive());
         let file_path = &block.file_path.replace("$date", date_string.as_str());
 
-        let mut file = OpenOptions::new()
+        let file = OpenOptions::new()
             .read(true)
             .open(file_path)
             .expect("cannot open file");
 
-        let mut pos: usize = 0;
+        // 128kb buffer
+        let mut buf_reader = BufReader::with_capacity(131072, file);
 
         let mut count: i32 = 0;
 
@@ -84,32 +85,44 @@ impl Input for FileAdapter {
                 }
             }
 
-            // If file ends, play in loop
-            if pos == file.metadata().unwrap().len() as usize {
-                if block.play_loop {
-                    pos = 0;
-                    file.seek(std::io::SeekFrom::Start(0)).unwrap();
-                } else {
-                    println!("File end");
-                    thread::sleep(Duration::from_secs(1));
-                }
-                continue;
-            }
-
             // If file is in timed format than remove first 4 bytes
             let mut diff_buf = [0; 4];
-            pos += file.read(&mut diff_buf).unwrap();
+
+            if let Ok(sz) = buf_reader.read(&mut diff_buf) {
+                sz
+            } else {
+                if block.play_loop {
+                    buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
+                    continue;
+                } else {
+                    println!("File ended, waiting for changes");
+                    thread::sleep(Duration::from_secs(2));
+                    continue;
+                };
+            };
 
             // Size header
             let mut size_buff = [0; 4];
-            pos += file.read(&mut size_buff).unwrap();
+            
+            if let Ok(sz) = buf_reader.read(&mut size_buff) {
+                sz
+            } else {
+                if block.play_loop {
+                    buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
+                    continue;
+                } else {
+                    println!("File ended, waiting for changes");
+                    thread::sleep(Duration::from_secs(2));
+                    continue;
+                };
+            };
+
             let size = bytes_to_u32(size_buff);
 
             if size == 0 {
 
                 if block.play_loop {
-                    pos = 0;
-                    file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                    buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
                     continue;
                 } else {
                     println!("File ended, waiting for changes");
@@ -134,9 +147,8 @@ impl Input for FileAdapter {
             }
 
             let mut buf = [0; BUF_SIZE];
-            if let Err(_) = file.read_exact(&mut buf[..size as usize]) {
-                pos += 0;
-                file.seek(std::io::SeekFrom::Start(0)).unwrap();
+            if let Err(_) = buf_reader.read_exact(&mut buf[..size as usize]) {
+                buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
                 continue;
             }
 

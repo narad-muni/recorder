@@ -1,4 +1,4 @@
-use std::{io::{self, Read, Write}, net::{TcpListener, TcpStream}, thread};
+use std::{io::{Read, Write}, net::{TcpListener, TcpStream}, thread};
 use bus::Bus;
 
 use crate::{
