@@ -148,8 +148,13 @@ impl Input for FileAdapter {
 
             let mut buf = [0; BUF_SIZE];
             if let Err(_) = buf_reader.read_exact(&mut buf[..size as usize]) {
-                buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
-                continue;
+                if block.play_loop {
+                    buf_reader.seek(std::io::SeekFrom::Start(0)).unwrap();
+                    continue;
+                } else {
+                    println!("File ended, waiting for changes");
+                    thread::sleep(Duration::from_secs(2));
+                }
             }
 
             #[cfg(debug_assertions)]
