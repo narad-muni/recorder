@@ -36,6 +36,8 @@ pub struct Block {
     #[serde(default)]
     pub interface_ip: String,
     #[serde(default)]
+    pub no_headers: bool,
+    #[serde(default)]
     pub play_timed: bool,
     #[serde(default)]
     pub play_loop: bool,

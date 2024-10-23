@@ -35,16 +35,18 @@ impl Output for FileAdapter {
 
         loop {
             if let Ok((data, size)) = channel.recv() {
-                // Add 4 time diff bytes
-                let diff = u32_to_bytes(prev_time.elapsed().as_millis() as u32);
-                prev_time = Instant::now();
-                file.write_all(&diff).unwrap();
+                if block.no_headers {
+                    // Add 4 time diff bytes
+                    let diff = u32_to_bytes(prev_time.elapsed().as_millis() as u32);
+                    prev_time = Instant::now();
+                    file.write_all(&diff).unwrap();
 
-                // Write size header
-                file.write_all(&u32_to_bytes(size)).unwrap();
+                    // Write size header
+                    file.write_all(&u32_to_bytes(size)).unwrap();
+                }
 
                 #[cfg(debug_assertions)]
-                println!("Writing {:?} bytes to File", data[0..size as usize].len());
+                println!("Writing {:?} bytes to File", size);
 
                 file.write_all(&data[0..size as usize]).unwrap();
             }

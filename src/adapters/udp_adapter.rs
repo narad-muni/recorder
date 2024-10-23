@@ -1,7 +1,5 @@
 use std::{
-    io::{BufReader, Read},
-    net::{Ipv4Addr, SocketAddrV4},
-    str::FromStr,
+    io::{BufReader, Read}, net::{Ipv4Addr, SocketAddrV4}, os::fd::AsRawFd, str::FromStr
 };
 
 use bus::{Bus, BusReader};
@@ -46,6 +44,7 @@ impl Output for UdpAdapter {
                 #[cfg(debug_assertions)]
                 println!("Writing {:?} bytes to udp", size);
                 socket.send(&data[0..size as usize]).unwrap();
+                let x = socket.as_raw_fd();
             }
         }
     }
